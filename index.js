@@ -26,6 +26,7 @@ const client = new Client({
 
 client.on("clientReady", () => {
 	console.log(`Logged in as ${client.user.tag}`);
+	console.log(`Client ID: ${client.user.id}`);
 	registerCommands().catch((error) => {
 		console.error("Could not register interaction commands:", error);
 	});
@@ -189,7 +190,21 @@ client.on("interactionCreate", async (interaction) => {
 				break;
 			}
 		}
-	}
+	} else if (interaction.commandName === "help") {
+			const embed = new EmbedBuilder()
+    			.setColor('#7289da')
+    			.setTitle('Help Command')
+    			.setDescription('Here is all of the commands this bot has')
+    			.setThumbnail(client.user.displayAvatarURL())
+    			.setFooter({ text: client.user.username, iconURL: client.user.displayAvatarURL() })
+    			.setTimestamp()
+    			.addFields({ name: '/birthday add', value: 'Run this command to add a birthday' })
+    			.addFields({ name: '/birthday remove', value: 'Run this command to remove a birthday' })
+    			.addFields({ name: '/birthday list', value: "Run this command to get a list of people's birthdays" })
+				.addFields({ name: '/settings', value: 'Run this command to change the settings of the bot' });
+
+			await interaction.reply({ embeds: [embed], ephemeral: true });
+		}
 
 	if (interaction.commandName === "settings") {
 		await interaction.reply({ ...createSettingsPanel(getSettings(), interaction.user.id), ephemeral: true });

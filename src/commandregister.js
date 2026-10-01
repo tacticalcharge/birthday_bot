@@ -1,4 +1,4 @@
-import { REST, Routes, SlashCommandBuilder } from "discord.js";
+import { REST, Routes, SlashCommandBuilder, ApplicationIntegrationType, InteractionContextType } from "discord.js";
 import "dotenv/config";
 import { fileURLToPath } from "node:url";
 
@@ -6,6 +6,11 @@ export const commands = [
 	new SlashCommandBuilder()
 		.setName("birthday")
 		.setDescription("Manage birthdays")
+		.setContexts([
+	        InteractionContextType.Guild,          // Server channels
+	        InteractionContextType.BotDM,          // Direct messages with the bot
+	        InteractionContextType.PrivateChannel   // Group DMs and other private chats
+		])
 		.addSubcommand((subcommand) => subcommand
 				.setName("add")
 				.setDescription("Add a birthday")
@@ -37,8 +42,10 @@ export const commands = [
 						.setRequired(true))),
 	new SlashCommandBuilder()
 		.setName("settings")
-		.setDescription("Configure birthday notifications")
-
+		.setDescription("Configure birthday notifications"),
+	new SlashCommandBuilder()
+		.setName("help")
+		.setDescription("Get help with the bot commands")
 ];
 
 export async function registerCommands() {
